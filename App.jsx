@@ -14,6 +14,15 @@ const { useState, useEffect, useRef } = React;
       const [connectionStatus, setConnectionStatus] = useState('');
       const [isAIThinking, setIsAIThinking] = useState(false);
 
+          const peerRef = useRef(null);
+      const connRef = useRef(null);
+
+      const [playerScore, setPlayerScore] = useState(0);
+      const [opponentScore, setOpponentScore] = useState(0);
+
+      const [showOpponentLeftModal, setShowOpponentLeftModal] = useState(false);
+
+
 
       const calculateWinner = (squares) => {
         const lines = [
@@ -379,60 +388,69 @@ const { useState, useEffect, useRef } = React;
         }
       }
 
-      if (gameMode === 'menu') {
-        return (
-          <div className="flex flex-col items-center justify-center min-h-screen bg-neutral-950 p-4">
-            <div className="w-full max-w-md">
-              <h1 className="text-4xl font-semibold text-center mb-2 text-neutral-100">
-                Infinite TacsNToes
-              </h1>
-              <p className="text-center text-neutral-400 mb-12 text-sm">
-                Each player can only have 3 pieces on the board
-              </p>
-              
-              <div className="space-y-4">
-                <button
-                  onClick={() => setGameMode('local')}
-                  className="w-full bg-neutral-100 text-neutral-950 font-medium py-4 px-6 
-                             hover:bg-white transition-all duration-150"
-                >
-                  Play Locally (Same Device)
-                </button>
-                
-                <button
-                  onClick={() => {
-                    setGameMode('ai');
-                    setMySymbol('X');
-                  }}
-                  className="w-full bg-neutral-100 text-neutral-950 font-medium py-4 px-6 
-                             hover:bg-white transition-all duration-150"
-                >
-                  Play vs AI
-                </button>
-                
-                <button
-                  onClick={createRoom}
-                  className="w-full bg-neutral-800 text-neutral-100 font-medium py-4 px-6 
-                             hover:bg-neutral-700 transition-all duration-150"
-                >
-                  Create Room (Host)
-                </button>
-                
-                <div className="space-y-2">
-                  <input
-                    type="text"
-                    placeholder="Enter room code"
-                    value={joinCode}
-                    onChange={(e) => setJoinCode(e.target.value)}
-                    className="w-full bg-neutral-900 text-neutral-100 border border-neutral-800 
-                               py-3 px-4 focus:outline-none focus:border-neutral-600"
-                  />
-                  <button
-                    onClick={joinRoom}
-                    className="w-full bg-neutral-800 text-neutral-100 font-medium py-4 px-6 
-                               hover:bg-neutral-700 transition-all duration-150"
-                  >
-                    Join Room
+if (gameMode === 'menu') {
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen bg-neutral-950 p-4">
+      <div className="w-full max-w-md">
+        <h1 className="text-4xl font-semibold text-center mb-2 text-neutral-100">
+          Infinite TacsNToes
+        </h1>
+
+        <p className="text-center text-neutral-400 mb-12 text-sm">
+          Each player can only have 3 pieces on the board
+        </p>
+
+        <div className="space-y-4">
+          <button
+            onClick={() => setGameMode('local')}
+            className="w-full bg-neutral-100 text-neutral-950 font-medium py-4 px-6 
+                       hover:bg-white transition-all duration-150"
+          >
+            Play Locally (Same Device)
+          </button>
+
+          <button
+            onClick={() => {
+              setGameMode('ai');
+              setMySymbol('X');
+            }}
+            className="w-full bg-neutral-100 text-neutral-950 font-medium py-4 px-6 
+                       hover:bg-white transition-all duration-150"
+          >
+            Play vs AI
+          </button>
+
+          <button
+            onClick={createRoom}
+            className="w-full bg-neutral-800 text-neutral-100 font-medium py-4 px-6 
+                       hover:bg-neutral-700 transition-all duration-150"
+          >
+            Create Room (Host)
+          </button>
+
+          <div className="space-y-2">
+            <input
+              type="text"
+              placeholder="Enter room code"
+              value={joinCode}
+              onChange={(e) => setJoinCode(e.target.value)}
+              className="w-full bg-neutral-900 text-neutral-100 border border-neutral-800 
+                         py-3 px-4 focus:outline-none focus:border-neutral-600"
+            />
+
+            <button
+              onClick={joinRoom}
+              className="w-full bg-neutral-800 text-neutral-100 font-medium py-4 px-6 
+                         hover:bg-neutral-700 transition-all duration-150"
+            >
+              Join Room
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 
       if (gameMode === 'hosting' || gameMode === 'joining') {
